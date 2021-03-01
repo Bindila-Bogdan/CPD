@@ -1,30 +1,17 @@
 package com.company;
 
-import java.util.LinkedList;
-import java.util.Queue;
 
+public class Printer extends Thread {
+    private final PrinterQueue printerQueue;
 
-public class Printer extends Thread{
-    private Queue printingQueue = new LinkedList<String>();
+    public Printer(PrinterQueue printerQueue) {
+        this.printerQueue = printerQueue;
+    }
 
     @Override
     public void run() {
-        while(true){
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        while (true) {
+            printerQueue.printingDocument();
         }
     }
-
-    public synchronized void print(int clerkNumber, double currentRequiredTime){
-        try {
-            wait();
-            System.out.println(clerkNumber + " is waiting.");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
 }
