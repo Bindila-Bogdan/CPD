@@ -21,8 +21,8 @@ public class Clerk extends Thread {
 
         for (int i = 0; i < documentsToPrint + 1; i++) {
             try {
-                int nothingToPrintFor = rand.nextInt(2000);
-                nothingToPrintFor += 1000;
+                int nothingToPrintFor = rand.nextInt(900);
+                nothingToPrintFor += 100;
 
                 Thread.sleep(nothingToPrintFor);
             } catch (InterruptedException e) {

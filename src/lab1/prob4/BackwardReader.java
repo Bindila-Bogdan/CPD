@@ -4,8 +4,8 @@ import java.util.Random;
 
 public class BackwardReader extends Thread {
     private boolean finishedReading;
-    private CommonMemory commonMemory;
-    private Random rand;
+    private final CommonMemory commonMemory;
+    private final Random rand;
 
     public BackwardReader(CommonMemory commonMemory) {
         this.commonMemory = commonMemory;
@@ -15,7 +15,7 @@ public class BackwardReader extends Thread {
 
     @Override
     public void run() {
-        System.out.println("Backward  reader has been created.");
+        System.out.println("Backward  reader was started created.");
         while (!finishedReading) {
             try {
                 Thread.sleep(rand.nextInt(1000));

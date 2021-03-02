@@ -1,7 +1,7 @@
 package lab1.prob4;
 
 public class Reader extends Thread {
-    private CommonMemory commonMemory;
+    private final CommonMemory commonMemory;
 
     public Reader(CommonMemory commonMemory) {
         this.commonMemory = commonMemory;

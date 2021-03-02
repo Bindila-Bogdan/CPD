@@ -3,7 +3,7 @@ package lab1.prob4;
 public class CommonMemory {
     private int firstIndex;
     private int secondIndex;
-    private String word;
+    private final String word;
     private boolean isReading;
     private boolean readingForward;
 
