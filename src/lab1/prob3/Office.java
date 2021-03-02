@@ -1,4 +1,4 @@
-package com.company;
+package lab1.prob3;
 
 import java.util.ArrayList;
 import java.util.Random;

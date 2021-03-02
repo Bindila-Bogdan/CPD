@@ -1,4 +1,4 @@
-package com.company;
+package lab1.prob3;
 
 public class PrinterQueue {
     private int clerkNumber;
