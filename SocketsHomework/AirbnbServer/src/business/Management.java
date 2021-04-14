@@ -15,10 +15,10 @@ public class Management {
     private final ArrayList<Guest> guests;
     private final ArrayList<Location> locations;
 
-    public Management(ArrayList<Host> hosts, ArrayList<Guest> guests, ArrayList<Location> locations) {
-        this.hosts = hosts;
-        this.guests = guests;
-        this.locations = locations;
+    public Management() {
+        this.hosts = new ArrayList<Host>();
+        this.guests = new ArrayList<Guest>();
+        this.locations = new ArrayList<Location>();
     }
 
     private String fullName;

@@ -125,4 +125,3 @@ public class Location {
         return locationInfo;
     }
 }
-
