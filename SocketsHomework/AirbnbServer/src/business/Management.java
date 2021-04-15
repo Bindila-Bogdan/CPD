@@ -26,35 +26,48 @@ public class Management {
     private int phoneNumber;
     private int age;
 
-    private boolean dataChecker(String phoneNumber, int age) {
+    private String dataChecker(String phoneNumber, int age) {
+        String message = "";
+
         if (phoneNumber.length() != 10) {
-            System.out.println("The phone number is invalid");
-            return false;
+            message = "The phone number is invalid";
+            return message;
         }
 
         if (age < 18) {
-            System.out.println("You must have at least 18 years old.");
-            return false;
+            message = "You must have at least 18 years old.";
+            return message;
         }
 
-        return true;
+        return message;
     }
 
-    public void addHost(String fullName, String mail, String phoneNumber, int age) {
-        if (dataChecker(phoneNumber, age)) {
+    public String addHost(String fullName, String mail, String phoneNumber, int age) {
+        String message = dataChecker(phoneNumber, age);
+
+        if (message.length() == 0) {
             this.hosts.add(new Host(fullName, mail, phoneNumber, age));
-            System.out.println("Host has been added.");
-        }
+            message = "Host " + fullName + " has been added.";
+
+            return message;
+        } else
+            return message;
     }
 
-    public void addGuest(String fullName, String mail, String phoneNumber, int age) {
-        if (dataChecker(phoneNumber, age)) {
+    public String addGuest(String fullName, String mail, String phoneNumber, int age) {
+        String message = dataChecker(phoneNumber, age);
+
+        if (message.length() == 0) {
             this.guests.add(new Guest(fullName, mail, phoneNumber, age));
-            System.out.println("Host has been added.");
-        }
+            message = "Guest " + fullName + " has been added.";
+
+            return message;
+        } else
+            return message;
     }
 
-    public void addLocation(String hostFullName, String city, String street, int number, float price, String description) {
+    public String addLocation(String hostFullName, String city, String street, int number, float price, String description) {
+        String message = "Location was added successfully.";
         boolean hostFound = false;
 
         if (this.CITIES.contains(city)) {
@@ -69,62 +82,76 @@ public class Management {
             }
 
             if (!hostFound)
-                System.out.println("Host with this name doesn't exist.");
+                message = "Host with this name doesn't exist.";
 
-        } else {
-            System.out.println("This city isn't registered in our database.");
-        }
+        } else
+            message = "This city isn't registered in our database.";
+
+        return message;
     }
 
-    public void bookLocation(int locationId, String guestFullName, String months) {
+    public String bookLocation(int locationId, String guestFullName, String months) {
         boolean locationFound = false, guestFound = false;
-        String[] monthsList = months.split(" ");
+        String[] monthsList = months.split("_");
+        String message = "";
 
         for (Location location : this.locations) {
             if (location.getId() == locationId) {
                 locationFound = true;
-
-                if (location.checkIfFree(monthsList)) {
+                message = location.checkIfFree(monthsList);
+                if (location.checkIfFree(monthsList).contains("is free")) {
                     for (Guest guest : this.guests) {
                         if (guest.getFullName().equals(guestFullName)) {
                             guestFound = true;
                             float totalPrice = location.getPrice() * monthsList.length;
                             guest.addBooking(locationId, months, totalPrice);
-
-                            System.out.println("Booking for user " + guestFullName + " at location " +
+                            location.bookForMonths(monthsList, guestFullName);
+                            message += ("Booking for user " + guestFullName + " at location " +
                                     location.getId() + " on " + months + " was recorded.");
                         }
                     }
-                }
+                } else
+                    return message;
             }
         }
 
         if (!locationFound)
-            System.out.println("Location with this id doesn't exist.");
+            message = "Location with this id doesn't exist.";
 
         if (!guestFound)
-            System.out.println("Guest with this name doesn't exist.");
+            message = "Guest with this name doesn't exist.";
+
+        return message;
     }
 
-    public void displayLocations() {
+    public String displayLocations() {
+        String message = "";
+
         for (Location location : this.locations) {
             for (Host host : this.hosts)
                 if (host.getHostedLocations().contains(location)) {
-                    System.out.println("Host: " + host.getFullName());
-                    System.out.println(location);
+                    message += "    Host: " + host.getFullName();
+                    message += location;
                 }
         }
+
+        return message;
     }
 
-    public void displayCityLocations(String city) {
+    public String displayCityLocations(String city) {
+        String message = "";
+
         for (Location location : this.locations) {
+            System.out.println(location);
             if (location.getCity().equals(city)) {
                 for (Host host : this.hosts)
                     if (host.getHostedLocations().contains(location)) {
-                        System.out.println("Host: " + host.getFullName());
-                        System.out.println(location);
+                        message += "    Host: " + host.getFullName();
+                        message += location;
                     }
             }
         }
+
+        return message;
     }
 }

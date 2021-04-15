@@ -2,6 +2,7 @@ package model;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class Location {
     private int id;
@@ -10,7 +11,7 @@ public class Location {
     private int number;
     private float price;
     private String description;
-    private HashMap<String, String> bookings;
+    private LinkedHashMap<String, String> bookings;
 
     public Location(int id, String city, String street, int number, float price, String description) {
         this.id = id;
@@ -19,7 +20,7 @@ public class Location {
         this.number = number;
         this.price = price;
         this.description = description;
-        this.bookings = new HashMap<>() {{
+        this.bookings = new LinkedHashMap<>() {{
             put("January", null);
             put("February", null);
             put("March", null);
@@ -35,9 +36,10 @@ public class Location {
         }};
     }
 
-    public boolean checkIfFree(String[] months) {
+    public String checkIfFree(String[] months) {
         boolean free = true;
         String bookedMonths = "";
+        String message = "";
 
         for (String month : months) {
             if (this.bookings.get(month) != null) {
@@ -47,11 +49,22 @@ public class Location {
         }
 
         if (free)
-            System.out.println("Location is free on " + Arrays.toString(months) + ".");
+            message = "Location is free on " + Arrays.toString(months) + ". ";
         else
-            System.out.println("This location is booked on " + bookedMonths + ".");
+            message = "This location is booked on " + bookedMonths + ". ";
 
-        return free;
+        return message;
+    }
+
+    public void bookForMonths(String[] monthsList, String guestName){
+        for(String month:this.bookings.keySet()){
+            for(String requestedMonth:monthsList){
+                if (requestedMonth.equals(month)){
+                    this.bookings.put(month, guestName);
+                }
+            }
+        }
+
     }
 
     public int getId() {
@@ -102,17 +115,17 @@ public class Location {
         this.description = description;
     }
 
-    public HashMap<String, String> getBookings() {
+    public LinkedHashMap<String, String> getBookings() {
         return bookings;
     }
 
-    public void setBookings(HashMap<String, String> bookings) {
+    public void setBookings(LinkedHashMap<String, String> bookings) {
         this.bookings = bookings;
     }
 
     @Override
     public String toString() {
-        String locationInfo = new String("id: " + this.id +
+        String locationInfo = new String(" id: " + this.id +
                 " city: " + this.city + " street: " + this.street +
                 " number: " + number + " price: " + price +
                 " description: " + description + " available months: ");

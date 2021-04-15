@@ -29,8 +29,8 @@ public class CommunicationHandler extends Thread {
                 if (message.equals("close communication"))
                     break;
                 else {
-                    System.out.println(message);
-                    forClient.println("Hello client!");
+                    message = this.processRequest(message);
+                    forClient.println(message);
                 }
             }
             this.closeCommunication();
@@ -45,5 +45,32 @@ public class CommunicationHandler extends Thread {
         this.fromClient.close();
         this.forClient.close();
         clientSocket.close();
+    }
+
+    private String processRequest(String receivedMessage) {
+        System.out.println("\nFrom client:\n" + receivedMessage);
+        String[] message = receivedMessage.split(" ");
+        String messageToSend = "";
+
+        if (message[0].equals("add_guest"))
+            messageToSend = management.addGuest(message[1], message[2], message[3], Integer.parseInt(message[4]));
+        else if (message[0].equals("add_host"))
+            messageToSend = management.addHost(message[1], message[2], message[3], Integer.parseInt(message[4]));
+        else if (message[0].equals("add_location"))
+            messageToSend = management.addLocation(message[1], message[2], message[3], Integer.parseInt(message[4]),
+                    Float.parseFloat(message[5]), message[6]);
+         else if (message[0].equals("show_available_locations"))
+            messageToSend = management.displayLocations();
+         else if (message[0].equals("show_available_city_locations"))
+            messageToSend = management.displayCityLocations(message[1]);
+         else if (message[0].equals("book_location"))
+            messageToSend = management.bookLocation(Integer.parseInt(message[1]), message[2], message[3]);
+         else
+            messageToSend = "Invalid request. Valid requests are: {add_guest, add_host, add_location," +
+                    " show_available_locations, show_available_city_locations, book_location}";
+
+        System.out.println("For client:\n" + messageToSend);
+
+        return messageToSend;
     }
 }
