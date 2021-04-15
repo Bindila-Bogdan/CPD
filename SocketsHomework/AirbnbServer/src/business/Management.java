@@ -21,11 +21,6 @@ public class Management {
         this.locations = new ArrayList<Location>();
     }
 
-    private String fullName;
-    private String mail;
-    private int phoneNumber;
-    private int age;
-
     private String dataChecker(String phoneNumber, int age) {
         String message = "";
 
@@ -49,9 +44,8 @@ public class Management {
             this.hosts.add(new Host(fullName, mail, phoneNumber, age));
             message = "Host " + fullName + " has been added.";
 
-            return message;
-        } else
-            return message;
+        }
+        return message;
     }
 
     public String addGuest(String fullName, String mail, String phoneNumber, int age) {
@@ -61,9 +55,8 @@ public class Management {
             this.guests.add(new Guest(fullName, mail, phoneNumber, age));
             message = "Guest " + fullName + " has been added.";
 
-            return message;
-        } else
-            return message;
+        }
+        return message;
     }
 
     public String addLocation(String hostFullName, String city, String street, int number, float price, String description) {
@@ -93,12 +86,12 @@ public class Management {
     public String bookLocation(int locationId, String guestFullName, String months) {
         boolean locationFound = false, guestFound = false;
         String[] monthsList = months.split("_");
-        String message = "";
+        StringBuilder message = new StringBuilder();
 
         for (Location location : this.locations) {
             if (location.getId() == locationId) {
                 locationFound = true;
-                message = location.checkIfFree(monthsList);
+                message = new StringBuilder(location.checkIfFree(monthsList));
                 if (location.checkIfFree(monthsList).contains("is free")) {
                     for (Guest guest : this.guests) {
                         if (guest.getFullName().equals(guestFullName)) {
@@ -106,52 +99,52 @@ public class Management {
                             float totalPrice = location.getPrice() * monthsList.length;
                             guest.addBooking(locationId, months, totalPrice);
                             location.bookForMonths(monthsList, guestFullName);
-                            message += ("Booking for user " + guestFullName + " at location " +
-                                    location.getId() + " on " + months + " was recorded.");
+                            message.append("Booking for user ").append(guestFullName).append(" at location ")
+                                    .append(location.getId()).append(" on ").append(months).append(" was recorded.")
+                                    .append("The price is: ").append(location.getPrice() * monthsList.length).append(" lei.");
                         }
                     }
                 } else
-                    return message;
+                    return message.toString();
             }
         }
 
         if (!locationFound)
-            message = "Location with this id doesn't exist.";
+            message = new StringBuilder("Location with this id doesn't exist.");
 
         if (!guestFound)
-            message = "Guest with this name doesn't exist.";
+            message = new StringBuilder("Guest with this name doesn't exist.");
 
-        return message;
+        return message.toString();
     }
 
     public String displayLocations() {
-        String message = "";
+        StringBuilder message = new StringBuilder();
 
         for (Location location : this.locations) {
             for (Host host : this.hosts)
                 if (host.getHostedLocations().contains(location)) {
-                    message += "    Host: " + host.getFullName();
-                    message += location;
+                    message.append("    Host: ").append(host.getFullName());
+                    message.append(location);
                 }
         }
 
-        return message;
+        return message.toString();
     }
 
     public String displayCityLocations(String city) {
-        String message = "";
+        StringBuilder message = new StringBuilder();
 
         for (Location location : this.locations) {
-            System.out.println(location);
             if (location.getCity().equals(city)) {
                 for (Host host : this.hosts)
                     if (host.getHostedLocations().contains(location)) {
-                        message += "    Host: " + host.getFullName();
-                        message += location;
+                        message.append("    Host: ").append(host.getFullName());
+                        message.append(location);
                     }
             }
         }
 
-        return message;
+        return message.toString();
     }
 }

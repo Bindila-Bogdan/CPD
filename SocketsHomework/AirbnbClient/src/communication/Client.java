@@ -12,8 +12,8 @@ public class Client {
     private final Socket socket;
     private final String clientName;
 
-    private BufferedReader fromServer;
-    private PrintWriter forServer;
+    private final BufferedReader fromServer;
+    private final PrintWriter forServer;
 
     public Client(String clientName) throws IOException {
         this.socket = new Socket(IP, PORT);

@@ -3,10 +3,10 @@ package communication;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Communication {
+public class ServerComm {
     private final ArrayList<Client> clients;
 
-    public Communication() throws IOException {
+    public ServerComm() throws IOException {
         this.clients = new ArrayList<>();
     }
 
@@ -15,6 +15,7 @@ public class Communication {
     }
 
     public void communicate() throws IOException {
+        this.messageEnvelope(this.clients.get(0), "invalid message");
         this.messageEnvelope(this.clients.get(0), "add_host Host1 host1_name@yahoo.com 0772047293 33");
         this.messageEnvelope(this.clients.get(0), "add_guest Guest1 guest1_name@yahoo.com 0712639201 22");
         this.messageEnvelope(this.clients.get(0), "add_guest Guest2 guest2_name@yahoo.com 0753585257 42");
@@ -28,7 +29,7 @@ public class Communication {
         this.messageEnvelope(this.clients.get(3), "show_available_city_locations Cluj-Napoca");
         this.messageEnvelope(this.clients.get(2), "book_location 1 Guest1 June_July_August");
         this.messageEnvelope(this.clients.get(2), "show_available_city_locations Cluj-Napoca");
-        this.messageEnvelope(this.clients.get(3), "book_location 1 Guest2 June_July_August");
+        this.messageEnvelope(this.clients.get(3), "book_location 1 Guest2 May_June");
         this.messageEnvelope(this.clients.get(3), "book_location 2 Guest2 December");
         this.messageEnvelope(this.clients.get(3), "show_available_locations");
 
@@ -41,16 +42,16 @@ public class Communication {
         message = client.getFromServer().readLine();
         System.out.println("From server:");
 
-        String[] messagePieces = message.split("   ");
-        if (messagePieces.length > 1)
-            for (String messagePiece : messagePieces)
-                System.out.println(messagePiece);
+        if (message.contains("    "))
+            System.out.println(message.replace("    ", "\n"));
         else
             System.out.println(message);
     }
 
     private void closeCommunication() throws IOException {
-        for (Client client : this.clients)
+        for (Client client : this.clients) {
+            client.getForServer().println("Close communication with " + client.getClientName() + ".");
             client.closeClientCommunication();
+        }
     }
 }

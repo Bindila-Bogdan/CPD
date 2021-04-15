@@ -1,7 +1,6 @@
 package model;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 public class Location {
@@ -56,15 +55,29 @@ public class Location {
         return message;
     }
 
-    public void bookForMonths(String[] monthsList, String guestName){
-        for(String month:this.bookings.keySet()){
-            for(String requestedMonth:monthsList){
-                if (requestedMonth.equals(month)){
+    public void bookForMonths(String[] monthsList, String guestName) {
+        for (String month : this.bookings.keySet()) {
+            for (String requestedMonth : monthsList) {
+                if (requestedMonth.equals(month)) {
                     this.bookings.put(month, guestName);
                 }
             }
         }
+    }
 
+    @Override
+    public String toString() {
+        String locationInfo = new String(" id: " + this.id +
+                " city: " + this.city + " street: " + this.street +
+                " number: " + number + " price: " + price +
+                " description: " + description + " available months: ");
+
+        for (String month : this.bookings.keySet()) {
+            if (this.bookings.get(month) == null)
+                locationInfo += (month + " ");
+        }
+
+        return locationInfo;
     }
 
     public int getId() {
@@ -121,20 +134,5 @@ public class Location {
 
     public void setBookings(LinkedHashMap<String, String> bookings) {
         this.bookings = bookings;
-    }
-
-    @Override
-    public String toString() {
-        String locationInfo = new String(" id: " + this.id +
-                " city: " + this.city + " street: " + this.street +
-                " number: " + number + " price: " + price +
-                " description: " + description + " available months: ");
-
-        for (String month : this.bookings.keySet()) {
-            if (this.bookings.get(month) == null)
-                locationInfo += (month + " ");
-        }
-
-        return locationInfo;
     }
 }

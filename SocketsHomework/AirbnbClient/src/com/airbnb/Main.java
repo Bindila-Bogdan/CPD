@@ -1,20 +1,19 @@
 package com.airbnb;
 
-import communication.Client;
-import communication.Communication;
+import communication.ServerComm;
 
 import java.io.IOException;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        Communication communication = new Communication();
-        communication.addClient("admin");
-        communication.addClient("Host1");
-        communication.addClient("Guest1");
-        communication.addClient("Guest2");
-        communication.addClient("Host2");
+        ServerComm serverComm = new ServerComm();
+        serverComm.addClient("Admin");
+        serverComm.addClient("Host1");
+        serverComm.addClient("Guest1");
+        serverComm.addClient("Guest2");
+        serverComm.addClient("Host2");
 
-        communication.communicate();
+        serverComm.communicate();
     }
 }

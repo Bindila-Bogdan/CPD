@@ -6,21 +6,21 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Communication {
+public class ClientComm {
     private final int PORT = 8;
-    private ServerSocket serverSocket;
-    private Management management;
+    private final ServerSocket serverSocket;
+    private final Management management;
 
-    public Communication() throws IOException {
+    public ClientComm() throws IOException {
         this.serverSocket = new ServerSocket(PORT);
         this.management = new Management();
     }
 
     public void handleRequests() throws IOException {
-        while(true){
+        while (true) {
             Socket clientSocket = this.serverSocket.accept();
-            CommunicationHandler communicationHandler = new CommunicationHandler(clientSocket, management);
-            communicationHandler.start();
+            CommHandler commHandler = new CommHandler(clientSocket, management);
+            commHandler.start();
         }
     }
 }
