@@ -1,21 +1,23 @@
 package com.cpd.debate_2;
 
+import com.cpd.debate_2.debaters_order.TransRecvConnection;
 import com.cpd.debate_2.pub_sub.Publisher;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.ConfigurableApplicationContext;
+
+import java.io.IOException;
 
 @SpringBootApplication
 public class Debate2Application {
-	@Bean
-	public CommandLineRunner runOnStartup(Publisher publisher) {
-		publisher.publishFootballMessage("debate_2");
-		return args -> publisher.publishFootballMessage("debate_2");
-	}
+    public static void main(String[] args) throws IOException {
+        ConfigurableApplicationContext context = SpringApplication.run(Debate2Application.class, args);
+        Publisher publisher = context.getBean(Publisher.class);
+        publisher.publishElectricGuitarsMessage("merge_2");
+        publisher.publishFootballMessage("merge_2");
 
-    public static void main(String[] args) {
-        SpringApplication.run(Debate2Application.class, args);
+        TransRecvConnection transRecvConnection = new TransRecvConnection();
+        transRecvConnection.start();
     }
 
 }

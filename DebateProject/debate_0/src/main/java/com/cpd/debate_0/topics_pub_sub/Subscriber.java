@@ -1,4 +1,4 @@
-package com.cpd.debate_2.pub_sub;
+package com.cpd.debate_0.topics_pub_sub;
 
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -16,6 +16,20 @@ public class Subscriber {
     private String debaterName;
 
     @RabbitListener(queues = "${rabbitmq.queue.0}")
+    public void receiveDataScienceMessage(Message message) {
+        String messageBody = (String) rabbitTemplate.getMessageConverter().fromMessage(message);
+        String messageHeader = "";
+        try {
+            messageHeader = (String) message.getMessageProperties().getHeaders().values().toArray()[0];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("Header is null.");
+        }
+
+        if (!messageHeader.equals(debaterName))
+            System.out.println("Received data science message: " + messageBody);
+    }
+
+    @RabbitListener(queues = "${rabbitmq.queue.1}")
     public void receiveElectricGuitarsMessage(Message message) {
         String messageBody = (String) rabbitTemplate.getMessageConverter().fromMessage(message);
         String messageHeader = "";
@@ -29,7 +43,7 @@ public class Subscriber {
             System.out.println("Received electric guitars message: " + messageBody);
     }
 
-    @RabbitListener(queues = "${rabbitmq.queue.1}")
+    @RabbitListener(queues = "${rabbitmq.queue.2}")
     public void receiveFootballMessage(Message message) {
         String messageBody = (String) rabbitTemplate.getMessageConverter().fromMessage(message);
         String messageHeader = "";
