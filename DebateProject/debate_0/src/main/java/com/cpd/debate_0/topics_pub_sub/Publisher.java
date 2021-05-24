@@ -21,7 +21,6 @@ public class Publisher {
             m.getMessageProperties().getHeaders().put("sender", debaterName);
             return m;
         });
-        System.out.println("Sent data science message: " + message);
     }
 
     public void publishElectricGuitarsMessage(String message) {
@@ -29,7 +28,6 @@ public class Publisher {
             m.getMessageProperties().getHeaders().put("sender", debaterName);
             return m;
         });
-        System.out.println("Sent electric guitars message: " + message);
     }
 
     public void publishFootballMessage(String message) {
@@ -37,6 +35,5 @@ public class Publisher {
             m.getMessageProperties().getHeaders().put("sender", debaterName);
             return m;
         });
-        System.out.println("Sent football message: " + message);
     }
 }

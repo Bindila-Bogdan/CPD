@@ -12,22 +12,21 @@ public class TokenTransmitter extends Thread {
 
     public TokenTransmitter(Socket socket, String token) throws IOException {
         this.socket = socket;
-        this.tokenState = token;
-        this.forTokenReceiver = new PrintWriter(socket.getOutputStream(), true);
+        tokenState = token;
+        forTokenReceiver = new PrintWriter(socket.getOutputStream(), true);
     }
 
     @Override
     public void run() {
         try {
             while (true) {
-                if (tokenState.contains("send")){
-                    this.forTokenReceiver.println("debate " + tokenState.split(" ")[1]);
-                    this.tokenState = "wait";
+                if (tokenState.contains("send")) {
+                    forTokenReceiver.println("debate " + tokenState.split(" ")[1]);
+                    tokenState = "wait";
                     TimeUnit.SECONDS.sleep(2);
-                }
-                else if (tokenState.contains("stop debate")) {
-                    this.closeClientCommunication();
-                    this.forTokenReceiver.println(tokenState);
+                } else if (tokenState.contains("stop debate")) {
+                    closeClientCommunication();
+                    forTokenReceiver.println(tokenState);
                     return;
                 }
             }
@@ -37,8 +36,8 @@ public class TokenTransmitter extends Thread {
     }
 
     void closeClientCommunication() throws IOException {
-        this.forTokenReceiver.close();
-        this.socket.close();
+        forTokenReceiver.close();
+        socket.close();
     }
 
     public void setTokenState(String tokenState) {

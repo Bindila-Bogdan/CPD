@@ -1,7 +1,8 @@
 package com.cpd.debate_1;
 
-import com.cpd.debate_1.debaters_order.TransRecvConnection;
-import com.cpd.debate_1.pub_sub.Publisher;
+import com.cpd.debate_1.presenter.Presenter;
+import com.cpd.debate_1.topics_pub_sub.Publisher;
+import com.cpd.debate_1.topics_pub_sub.Subscriber;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -12,11 +13,15 @@ import java.io.IOException;
 public class Debate1Application {
     public static void main(String[] args) throws IOException {
         ConfigurableApplicationContext context = SpringApplication.run(Debate1Application.class, args);
-        Publisher publisher = context.getBean(Publisher.class);
-        publisher.publishDataScienceMessage("merge_1");
-        publisher.publishElectricGuitarsMessage("merge_1");
 
-        TransRecvConnection transRecvConnection = new TransRecvConnection();
-        transRecvConnection.start();
+        System.setProperty("java.awt.headless", "false");
+
+        Publisher publisher = context.getBean(Publisher.class);
+        Subscriber subscriber = context.getBean(Subscriber.class);
+
+        Presenter presenter = new Presenter(subscriber, publisher,
+                "Data science topic - debater 1",
+                "Electric guitars topic - debater 1");
+        presenter.showFrames();
     }
 }

@@ -20,12 +20,12 @@ public class TransRecvConnection extends Thread {
     public TransRecvConnection() throws IOException {
         tokenState = "wait";
 
-        this.receiverSocket = new ServerSocket(RECEIVER_PORT);
-        Socket socket = this.receiverSocket.accept();
+        receiverSocket = new ServerSocket(RECEIVER_PORT);
+        Socket socket = receiverSocket.accept();
         tokenReceiver = new TokenReceiver(socket, tokenState);
         tokenReceiver.start();
 
-        this.transmitterSocket = new Socket(IP, TRANSMITTER_PORT);
+        transmitterSocket = new Socket(IP, TRANSMITTER_PORT);
         tokenTransmitter = new TokenTransmitter(transmitterSocket, tokenState);
         tokenTransmitter.start();
     }
@@ -33,8 +33,8 @@ public class TransRecvConnection extends Thread {
     @Override
     public void run() {
         while (true) {
-            this.tokenState = tokenReceiver.getTokenState();
-            this.tokenTransmitter.setTokenState(tokenState);
+            tokenState = tokenReceiver.getTokenState();
+            tokenTransmitter.setTokenState(tokenState);
 
             if (tokenState.contains("stop debate"))
                 return;

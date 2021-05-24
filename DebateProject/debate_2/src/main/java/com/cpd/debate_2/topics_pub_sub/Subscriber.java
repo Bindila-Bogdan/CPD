@@ -1,4 +1,4 @@
-package com.cpd.debate_0.topics_pub_sub;
+package com.cpd.debate_2.topics_pub_sub;
 
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -17,24 +17,10 @@ public class Subscriber {
     @Value("${debater.name}")
     private String debaterName;
 
-    private String dataScienceMessages = "*Welcome to data science debate*\n\n";
     private String electricGuitarsMessages = "*Welcome to electric guitars debate*\n\n";
     private String footballMessages = "*Welcome to football debate*\n\n";
 
     @RabbitListener(queues = "${rabbitmq.queue.0}")
-    public void receiveDataScienceMessage(Message message) {
-        ArrayList<String> messageContent = extractFromMessage(message);
-
-        if (messageContent.get(0).equals(debaterName))
-            dataScienceMessages += "\t\t      me";
-        else
-            dataScienceMessages += messageContent.get(0);
-
-        dataScienceMessages += (": " + messageContent.get(1));
-        dataScienceMessages += "\n";
-    }
-
-    @RabbitListener(queues = "${rabbitmq.queue.1}")
     public void receiveElectricGuitarsMessage(Message message) {
         ArrayList<String> messageContent = extractFromMessage(message);
 
@@ -47,7 +33,7 @@ public class Subscriber {
         electricGuitarsMessages += "\n";
     }
 
-    @RabbitListener(queues = "${rabbitmq.queue.2}")
+    @RabbitListener(queues = "${rabbitmq.queue.1}")
     public void receiveFootballMessage(Message message) {
         ArrayList<String> messageContent = extractFromMessage(message);
 
@@ -75,10 +61,6 @@ public class Subscriber {
         messageContent.add(messageBody);
 
         return messageContent;
-    }
-
-    public String getDataScienceMessages() {
-        return dataScienceMessages;
     }
 
     public String getElectricGuitarsMessages() {

@@ -1,4 +1,4 @@
-package com.cpd.debate_0.topics_pub_sub;
+package com.cpd.debate_1.topics_pub_sub;
 
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -19,7 +19,6 @@ public class Subscriber {
 
     private String dataScienceMessages = "*Welcome to data science debate*\n\n";
     private String electricGuitarsMessages = "*Welcome to electric guitars debate*\n\n";
-    private String footballMessages = "*Welcome to football debate*\n\n";
 
     @RabbitListener(queues = "${rabbitmq.queue.0}")
     public void receiveDataScienceMessage(Message message) {
@@ -47,19 +46,6 @@ public class Subscriber {
         electricGuitarsMessages += "\n";
     }
 
-    @RabbitListener(queues = "${rabbitmq.queue.2}")
-    public void receiveFootballMessage(Message message) {
-        ArrayList<String> messageContent = extractFromMessage(message);
-
-        if (messageContent.get(0).equals(debaterName))
-            footballMessages += "\t\t      me";
-        else
-            footballMessages += messageContent.get(0);
-
-        footballMessages += (": " + messageContent.get(1));
-        footballMessages += "\n";
-    }
-
     private ArrayList<String> extractFromMessage(Message message) {
         String messageBody = (String) rabbitTemplate.getMessageConverter().fromMessage(message);
 
@@ -83,9 +69,5 @@ public class Subscriber {
 
     public String getElectricGuitarsMessages() {
         return electricGuitarsMessages;
-    }
-
-    public String getFootballMessages() {
-        return footballMessages;
     }
 }
