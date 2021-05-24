@@ -5,47 +5,47 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class TransRecvConnection extends Thread {
-    private String token;
+    private String tokenState;
 
     private String IP = "127.0.0.1";
-    private Integer PORT_FOR_TRANSMITTER = 8092;
-    private Integer PORT_FOR_RECEIVER = 8093;
+    private Integer RECEIVER_PORT = 8092;
+    private Integer TRANSMITTER_PORT = 8093;
 
-    private final ServerSocket socketForTransmitter;
-    private final Socket socketForReceiver;
+    private final ServerSocket receiverSocket;
+    private final Socket transmitterSocket;
 
     private final TokenReceiver tokenReceiver;
     private final TokenTransmitter tokenTransmitter;
 
     public TransRecvConnection() throws IOException {
-        token = "wait";
+        tokenState = "wait";
 
-        this.socketForTransmitter = new ServerSocket(PORT_FOR_TRANSMITTER);
-        Socket socket = this.socketForTransmitter.accept();
-        tokenReceiver = new TokenReceiver(socket, token);
+        this.receiverSocket = new ServerSocket(RECEIVER_PORT);
+        Socket socket = this.receiverSocket.accept();
+        tokenReceiver = new TokenReceiver(socket, tokenState);
         tokenReceiver.start();
 
-        this.socketForReceiver = new Socket(IP, PORT_FOR_RECEIVER);
-        tokenTransmitter = new TokenTransmitter(socketForReceiver, token);
+        this.transmitterSocket = new Socket(IP, TRANSMITTER_PORT);
+        tokenTransmitter = new TokenTransmitter(transmitterSocket, tokenState);
         tokenTransmitter.start();
     }
 
     @Override
     public void run() {
         while (true) {
-            this.token = tokenReceiver.getToken();
-            this.tokenTransmitter.setToken(token);
+            this.tokenState = tokenReceiver.getTokenState();
+            this.tokenTransmitter.setTokenState(tokenState);
 
-            if (token.contains("stop debate"))
+            if (tokenState.contains("stop debate"))
                 return;
         }
     }
 
     public void setToken(String token) {
-        this.token = token;
+        this.tokenState = token;
     }
 
     public String getToken() {
-        return token;
+        return tokenState;
     }
 }

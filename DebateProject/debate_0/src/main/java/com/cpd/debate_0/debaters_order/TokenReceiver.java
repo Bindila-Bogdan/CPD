@@ -7,12 +7,12 @@ import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 
 public class TokenReceiver extends Thread {
-    public String token;
+    public String tokenState;
     private final Socket socket;
     private final BufferedReader fromTokenTransmitter;
 
     public TokenReceiver(Socket socket, String token) throws IOException {
-        this.token = token;
+        this.tokenState = token;
         this.socket = socket;
         this.fromTokenTransmitter = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
@@ -20,13 +20,12 @@ public class TokenReceiver extends Thread {
     @Override
     public void run() {
         try {
-            while (((token = fromTokenTransmitter.readLine()) != null)) {
-                if (token.contains("stop debate")) {
-                    System.out.println(token);
+            while (((tokenState = fromTokenTransmitter.readLine()) != null)) {
+                if (tokenState.contains("stop debate")) {
                     this.closeCommunication();
                     break;
-                } else if (token.contains("debate")) {
-                    this.handleToken();
+                } else if (tokenState.contains("debate")) {
+                    this.handleToken(tokenState);
                 } else {
                     System.out.println("Token is unknown.");
                 }
@@ -36,15 +35,23 @@ public class TokenReceiver extends Thread {
         }
     }
 
-    public void handleToken() throws InterruptedException {
-        System.out.println("Token was received.");
+    public void handleToken(String tokenState) throws InterruptedException {
+        Integer tokenValue = Integer.parseInt(tokenState.split(" ")[1]);
+        if(tokenValue % 3 == 0)
+            System.out.println("Token with value " + tokenValue.toString() + " was received.");
+        else
+            this.tokenState = "wait";
 
-        this.token = "debate";
         TimeUnit.SECONDS.sleep(10);
-        this.token = "send";
 
-        System.out.println("Token was passed.");
-        System.out.println("------------------------------");
+        tokenValue++;
+        this.tokenState = "send " + tokenValue.toString();
+
+        if(tokenValue % 3 == 1)
+            System.out.println("Token with value " + tokenValue.toString() + " was passed.\n");
+
+        TimeUnit.SECONDS.sleep(1);
+        this.tokenState = "wait";
     }
 
     private void closeCommunication() throws IOException {
@@ -52,7 +59,7 @@ public class TokenReceiver extends Thread {
         this.socket.close();
     }
 
-    public String getToken() {
-        return token;
+    public String getTokenState() {
+        return tokenState;
     }
 }
