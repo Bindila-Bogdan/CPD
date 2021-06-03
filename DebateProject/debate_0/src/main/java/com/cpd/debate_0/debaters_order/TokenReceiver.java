@@ -7,7 +7,7 @@ import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 
 public class TokenReceiver extends Thread {
-    public String tokenState;
+    private String tokenState;
     private final Socket socket;
     private final BufferedReader fromTokenTransmitter;
 

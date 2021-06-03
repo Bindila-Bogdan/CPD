@@ -7,9 +7,9 @@ import java.net.Socket;
 public class TransRecvConnection extends Thread {
     private String tokenState;
 
-    private String IP = "127.0.0.1";
-    private Integer RECEIVER_PORT = 8093;
-    private Integer TRANSMITTER_PORT = 8091;
+    private final String IP = "127.0.0.1";
+    private final Integer RECEIVER_PORT = 8093;
+    private final Integer TRANSMITTER_PORT = 8091;
 
     private final ServerSocket receiverSocket;
     private final Socket transmitterSocket;

@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.util.concurrent.TimeUnit;
 
 public class TokenTransmitter extends Thread {
-    public String tokenState;
+    private String tokenState;
     private final Socket socket;
     private final PrintWriter forTokenReceiver;
 

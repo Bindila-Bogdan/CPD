@@ -11,11 +11,11 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class Presenter {
-    private Timer messageUpdateTimer, buttonTimer;
-    private Subscriber subscriber;
-    private Publisher publisher;
-    private TransRecvConnection transRecvConnection;
-    private View viewDataScience, viewElectricGuitars, viewFootball;
+    private final Timer messageUpdateTimer, buttonTimer;
+    private final Subscriber subscriber;
+    private final Publisher publisher;
+    private final TransRecvConnection transRecvConnection;
+    private final View viewDataScience, viewElectricGuitars, viewFootball;
 
     public Presenter(Subscriber subscriber, Publisher publisher, String frameNameDataScience,
                      String frameNameElectricGuitars, String frameNameFootball) throws IOException {
@@ -36,7 +36,7 @@ public class Presenter {
         messageUpdateTimer = new Timer(100, new UpdateMessagesListener());
         messageUpdateTimer.start();
 
-        buttonTimer = new Timer(1000, new UpdateButtonListener());
+        buttonTimer = new Timer(100, new UpdateButtonListener());
         buttonTimer.start();
     }
 
