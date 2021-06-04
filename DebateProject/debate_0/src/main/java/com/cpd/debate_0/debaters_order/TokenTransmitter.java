@@ -20,12 +20,15 @@ public class TokenTransmitter extends Thread {
     public void run() {
         try {
             while (true) {
-                if (tokenState.contains("send")){
+                if (tokenState.contains("send")) {
                     forTokenReceiver.println("debate " + tokenState.split(" ")[1]);
                     tokenState = "wait";
                     TimeUnit.SECONDS.sleep(2);
-                }
-                else if (tokenState.contains("stop debate")) {
+                } else if (tokenState.contains("initialize")) {
+                    forTokenReceiver.println(tokenState);
+                    tokenState = "wait";
+                    TimeUnit.MILLISECONDS.sleep(200);
+                } else if (tokenState.contains("stop debate")) {
                     closeClientCommunication();
                     forTokenReceiver.println(tokenState);
                     return;

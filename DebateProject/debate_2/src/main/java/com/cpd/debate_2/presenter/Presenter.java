@@ -22,14 +22,15 @@ public class Presenter {
         this.subscriber = subscriber;
         this.publisher = publisher;
 
+        transRecvConnection = new TransRecvConnection();
+        transRecvConnection.start();
+
         viewElectricGuitars = new View(frameNameElectricGuitars);
         viewFootball = new View(frameNameFootball);
 
         viewElectricGuitars.getSendButton().addActionListener(new SendElectricGuitarsMessageListener());
         viewFootball.getSendButton().addActionListener(new SendFootballMessageListener());
 
-        transRecvConnection = new TransRecvConnection();
-        transRecvConnection.start();
 
         messageUpdateTimer = new Timer(100, new UpdateMessagesListener());
         messageUpdateTimer.start();

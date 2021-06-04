@@ -18,7 +18,6 @@ public class Publisher {
 
     public void publishMessageOnTopic(String message, String topicName) {
         amqpTemplate.convertAndSend(exchange, topicName, message, m -> {
-        amqpTemplate.convertAndSend(exchange, topicName, message, m -> {
             m.getMessageProperties().getHeaders().put("sender", debaterName);
             return m;
         });
