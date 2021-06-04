@@ -65,7 +65,7 @@ public class Presenter {
             String messageToSend = viewElectricGuitars.getTextField().getText();
 
             if (messageToSend.length() != 0)
-                publisher.publishElectricGuitarsMessage(messageToSend);
+                publisher.publishMessageOnTopic(messageToSend, "electric_guitars");
 
             viewElectricGuitars.getTextField().setText("");
         }
@@ -77,7 +77,7 @@ public class Presenter {
             String messageToSend = viewFootball.getTextField().getText();
 
             if (messageToSend.length() != 0)
-                publisher.publishFootballMessage(messageToSend);
+                publisher.publishMessageOnTopic(messageToSend, "football");
 
             viewFootball.getTextField().setText("");
         }

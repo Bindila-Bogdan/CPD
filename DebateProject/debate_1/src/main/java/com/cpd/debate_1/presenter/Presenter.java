@@ -65,7 +65,7 @@ public class Presenter {
             String messageToSend = viewDataScience.getTextField().getText();
 
             if (messageToSend.length() != 0)
-                publisher.publishDataScienceMessage(messageToSend);
+                publisher.publishMessageOnTopic(messageToSend, "data_science");
 
             viewDataScience.getTextField().setText("");
         }
@@ -77,7 +77,7 @@ public class Presenter {
             String messageToSend = viewElectricGuitars.getTextField().getText();
 
             if (messageToSend.length() != 0)
-                publisher.publishElectricGuitarsMessage(messageToSend);
+                publisher.publishMessageOnTopic(messageToSend, "electric_guitars");
 
             viewElectricGuitars.getTextField().setText("");
         }

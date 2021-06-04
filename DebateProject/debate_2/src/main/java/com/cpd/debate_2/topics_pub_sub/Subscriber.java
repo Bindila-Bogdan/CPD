@@ -22,31 +22,16 @@ public class Subscriber {
 
     @RabbitListener(queues = "${rabbitmq.queue.0}")
     public void receiveElectricGuitarsMessage(Message message) {
-        ArrayList<String> messageContent = extractFromMessage(message);
+        electricGuitarsMessages = extractFromMessage(message, electricGuitarsMessages);
 
-        if (messageContent.get(0).equals(debaterName))
-            electricGuitarsMessages += "\t\t      me";
-        else
-            electricGuitarsMessages += messageContent.get(0);
-
-        electricGuitarsMessages += (": " + messageContent.get(1));
-        electricGuitarsMessages += "\n";
     }
 
     @RabbitListener(queues = "${rabbitmq.queue.1}")
     public void receiveFootballMessage(Message message) {
-        ArrayList<String> messageContent = extractFromMessage(message);
-
-        if (messageContent.get(0).equals(debaterName))
-            footballMessages += "\t\t      me";
-        else
-            footballMessages += messageContent.get(0);
-
-        footballMessages += (": " + messageContent.get(1));
-        footballMessages += "\n";
+        footballMessages = extractFromMessage(message, footballMessages);
     }
 
-    private ArrayList<String> extractFromMessage(Message message) {
+    private String extractFromMessage(Message message, String topicMessages) {
         String messageBody = (String) rabbitTemplate.getMessageConverter().fromMessage(message);
 
         String messageHeader = "";
@@ -56,11 +41,15 @@ public class Subscriber {
             System.out.println("Header is null.");
         }
 
-        ArrayList<String> messageContent = new ArrayList<>();
-        messageContent.add(messageHeader);
-        messageContent.add(messageBody);
+        if (messageHeader.equals(debaterName))
+            topicMessages += "\t\t      me";
+        else
+            topicMessages += messageHeader;
 
-        return messageContent;
+        topicMessages += (": " + messageBody);
+        topicMessages += "\n";
+
+        return topicMessages;
     }
 
     public String getElectricGuitarsMessages() {
@@ -70,4 +59,5 @@ public class Subscriber {
     public String getFootballMessages() {
         return footballMessages;
     }
+}
 }

@@ -16,15 +16,9 @@ public class Publisher {
     @Value("${debater.name}")
     private String debaterName;
 
-    public void publishDataScienceMessage(String message) {
-        amqpTemplate.convertAndSend(exchange, "data_science", message, m -> {
-            m.getMessageProperties().getHeaders().put("sender", debaterName);
-            return m;
-        });
-    }
-
-    public void publishElectricGuitarsMessage(String message) {
-        amqpTemplate.convertAndSend(exchange, "electric_guitars", message, m -> {
+    public void publishMessageOnTopic(String message, String topicName) {
+        amqpTemplate.convertAndSend(exchange, topicName, message, m -> {
+        amqpTemplate.convertAndSend(exchange, topicName, message, m -> {
             m.getMessageProperties().getHeaders().put("sender", debaterName);
             return m;
         });

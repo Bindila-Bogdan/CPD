@@ -22,31 +22,15 @@ public class Subscriber {
 
     @RabbitListener(queues = "${rabbitmq.queue.0}")
     public void receiveDataScienceMessage(Message message) {
-        ArrayList<String> messageContent = extractFromMessage(message);
-
-        if (messageContent.get(0).equals(debaterName))
-            dataScienceMessages += "\t\t      me";
-        else
-            dataScienceMessages += messageContent.get(0);
-
-        dataScienceMessages += (": " + messageContent.get(1));
-        dataScienceMessages += "\n";
+        dataScienceMessages = extractFromMessage(message, dataScienceMessages);
     }
 
     @RabbitListener(queues = "${rabbitmq.queue.1}")
     public void receiveElectricGuitarsMessage(Message message) {
-        ArrayList<String> messageContent = extractFromMessage(message);
-
-        if (messageContent.get(0).equals(debaterName))
-            electricGuitarsMessages += "\t\t      me";
-        else
-            electricGuitarsMessages += messageContent.get(0);
-
-        electricGuitarsMessages += (": " + messageContent.get(1));
-        electricGuitarsMessages += "\n";
+        electricGuitarsMessages = extractFromMessage(message, electricGuitarsMessages);
     }
 
-    private ArrayList<String> extractFromMessage(Message message) {
+    private String extractFromMessage(Message message, String topicMessages) {
         String messageBody = (String) rabbitTemplate.getMessageConverter().fromMessage(message);
 
         String messageHeader = "";
@@ -60,7 +44,15 @@ public class Subscriber {
         messageContent.add(messageHeader);
         messageContent.add(messageBody);
 
-        return messageContent;
+        if (messageContent.get(0).equals(debaterName))
+            dataScienceMessages += "\t\t      me";
+        else
+            dataScienceMessages += messageContent.get(0);
+
+        dataScienceMessages += (": " + messageContent.get(1));
+        dataScienceMessages += "\n";
+
+        return dataScienceMessages;
     }
 
     public String getDataScienceMessages() {
